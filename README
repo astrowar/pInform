@@ -1,0 +1,3 @@
+pInform é um pequeno compilador e interpeter desenvolvido para a criação de estorias de ficcao iterativas.
+
+Seu design se baseia no Prolog e no Inform 7. O codigo é desenvolvido em Typescript.
