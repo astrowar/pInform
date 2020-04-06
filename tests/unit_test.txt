@@ -1,0 +1,12 @@
+
+do room(comando)
+do room(reator)
+do room(exterior)
+do room(camara)
+
+do perfom() as  { 
+   $mar = "mares", 
+   write("$mar esta revolto \n") 
+   }
+
+do main() as perfom()
