@@ -14,7 +14,11 @@ logs
 results
 tmp
 
+
 # Build
+src/out
+src/modules
+modules
 public/css/main.css
 package-lock.json
 

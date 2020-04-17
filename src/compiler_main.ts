@@ -958,15 +958,24 @@ export namespace SyntaxParser {
         let xlines = linesSplit(xcode)
         for (var [i, iline] of xlines.entries()) {
  
-            if (isEmptyLine(iline.line)) continue
+            if (isEmptyLine(iline.line))
+            {
+                 continue
+            }
             let sline = splitStringInput(iline.line)
 
             let has_code: boolean = false
             
-            if (isBalanced(sline) ==false ) continue
+            if (isBalanced(sline) ==false ) 
+            {
+                continue
+           }
             for (var vj of MParse.genPattens_i(sline, basePathens)) {
                 has_code = vj[1](vj[0], resolutionFunc)
-                if (has_code) break
+                if (has_code)
+                {
+                     break
+                }
             }
             if (has_code ==false )
             {

@@ -6,12 +6,14 @@ var fs = require('fs');
 
 
 let ctx :Interp.Context = undefined
-let script_filename = 'unit_test.txt'
+let script_filename = 'C:/dev/TS/pInform/tests/unit_test.txt'
+//let script_filename = process.argv[2]
 if (fs.existsSync(script_filename) ) {
     var s = fs.readFileSync(script_filename,'utf8');
    ctx = processScript(s)
 }
 else{
+    console.log("Script " + script_filename+" File Not found")
     throw "Script " + script_filename+" File Not found"
 }
 ctx.init()

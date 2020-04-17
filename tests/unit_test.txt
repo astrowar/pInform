@@ -1,8 +1,8 @@
 
 do room(comando)
 do room(reator)
-do room(exterior)
-do room(camara)
+do room(exterior) 
+do room(camara) 
 
 do perfom() as  { 
    $mar = "mares", 
