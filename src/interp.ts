@@ -120,6 +120,18 @@ export namespace Interp {
     }
 
 
+    class KindDefinition   {
+        constructor(public unique_name: string,public parents:  GTems.Atom[] ) { 
+        }
+    }
+
+    class InstanceDefinition   {
+        constructor(public unique_name: string,public kinds:  GTems.Atom[] ) { 
+        }
+    }
+
+
+   
 
     function getComplexityTerm(p: GTems.GBase): number {
 
@@ -213,6 +225,7 @@ export namespace Interp {
     };
 
     export class Context implements ContextBase {
+        
 
 
         init_const() {
@@ -251,12 +264,18 @@ export namespace Interp {
             //let n = this.init_entries.length
             let sol = new Solution.Solution(Solution.SolutionState.QTrue, GTems.atom_true(), {})
             let stk: QueryStack = new QueryStack()
-            for (var e of this.query_ar0(stk, sol, "init")) { }
+            for (var e of this.query_ar0(stk, sol, "init")) { } 
+        }
 
 
+        init_class() {
+            //inicia todas as definicoes de classes
+ 
         }
 
         init() {
+
+            this.init_class()
             this.init_const()
             this.init_var()
             this.init_pred()
@@ -276,6 +295,8 @@ export namespace Interp {
         //variaveis globais
         var_atoms: VarEntry[] = []
 
+        kinds: KindDefinition[] = [];
+        instances: InstanceDefinition[] = [];
 
         public addPredicateFunc(p: GTems.Functor | GTems.LiteralStr | GTems.Variable, code: any, condition: any, p_options: [any]): boolean {
 
@@ -315,9 +336,86 @@ export namespace Interp {
                 //this.init_entries = this.init_entries.sort((a, b) => { return predicateEntryOrder(a, b) })
                 //return true;
             }
+
+            if (pred_actual.entry.name == "kind") {                 
+                this.addKindDefinition( p.args )
+                return true
+            }
+
+            if (pred_actual.entry.name == "instance") {                 
+                this.addinstanceDefinition( p.args )
+                return true
+            }
+
+
+
             if (isUndefined(this.predicades[pred_actual.entry.name])) this.predicades[pred_actual.entry.name] = []
             this.predicades[pred_actual.entry.name].unshift(pred_actual)
             this.predicades[pred_actual.entry.name] = this.predicades[pred_actual.entry.name].sort((a, b) => { return predicateEntryOrder(a, b) })
+            return true
+        }
+
+
+        //Add class and Instances
+
+        public isDerivedOf( x: string , kind_top: string){
+            if ( x === kind_top) 
+            {
+              return true
+            }
+
+           
+            for (let element  of  this.kinds )  {  
+                    if (element.unique_name ===x ){
+                       for (let pkind  of element.parents ) 
+                       {
+                           if (this.isDerivedOf(pkind.toString() , kind_top)) 
+                            return true
+                       }
+                      
+                    }
+          
+                }  
+                 
+                for (let element  of  this.instances )  {
+                    if (element.unique_name ===x ){
+                        for (let bkind  of element.kinds)  
+                         if (this.isDerivedOf(bkind.toString() , kind_top))
+                            return true
+                    }                    
+                } 
+
+
+        
+            return false
+        }
+
+
+        public addKindDefinition( x: GTems.GBase[] ): boolean {
+            let target = x[0]
+            if (target instanceof GTems.Atom ) {
+               let k =  new KindDefinition(target.name , [] )
+               if (x.length > 1  ){
+                   x.slice(1).forEach(element => {
+                       if ( element instanceof GTems.Atom) k.parents.push(element)
+                   });                
+               }
+               this.kinds.push(k)
+            }
+            return true
+        }
+
+        public addinstanceDefinition( x: GTems.GBase[] ): boolean {
+            let target = x[0]
+            if (target instanceof GTems.Atom ) {
+               let k =  new InstanceDefinition(target.name , [] )
+               if (x.length > 1  ){
+                   x.slice(1).forEach(element => {
+                       if ( element instanceof GTems.Atom) k.kinds.push(element)
+                   });                
+               }
+               this.instances.push(k)
+            }
             return true
         }
 
@@ -1732,6 +1830,23 @@ export namespace Interp {
             }
 
 
+            //testa se eh uma pergunta de class
+           
+             
+            for (var [i, kk] of  this.kinds.entries()) {
+                  if (f_name === kk.unique_name){
+                        if (this.isDerivedOf(arg1.toString(), f_name) )                            
+                               yield  new Solution.Solution(Solution.SolutionState.QTrue, GTems.atom_true(), {})                             
+                        else  
+                               yield new Solution.Solution(Solution.SolutionState.QTrue, GTems.atom_false(), {})
+                         return 
+                    }
+             }
+             
+              
+
+                
+            
 
             for (var r of this.query_n_argv(stk, sol, attribSelect, f_name, [arg1])) {
                 yield r
@@ -1754,10 +1869,21 @@ export namespace Interp {
             }
 
 
+             
+
+
             if (attribSelect != PredicateKind.UNLESS) {
                 if (f_name === "repr") { }
                 else {
-                    this.warring("Predicate " + f_name + "/1  not found ")
+
+                    if  (f_name in this.predicades) { 
+                        this.warring("Predicate " + f_name + "/1  not apply ")
+                        //yield new Solution.Solution(Solution.SolutionState.QFalse, GTems.atom_false(), {})
+                        return 
+                    }
+                    else{
+                      this.warring("Predicate " + f_name + "/1  not found ")
+                    }
                 }
             }
 

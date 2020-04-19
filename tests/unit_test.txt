@@ -1,12 +1,22 @@
 
-do room(comando)
-do room(reator)
-do room(exterior) 
-do room(camara) 
+//define uma class
+
+do kind(thing)
+do kind(device,thing)
+do kind(lightSource)
+
+
+do instance( flashlight, lightSource, device )
+ 
+
+
+unless  lighten($x) as false 
+do  lighten($x) as lightSource($x) 
+do  lighten($x) as device($x), lightSource($x) , 
 
 do perfom() as  { 
-   $mar = "mares", 
-   write("$mar esta revolto \n") 
+   lighten(flashlight),   
+   write("flashlight is usefull in dark places \n") 
    }
 
 do main() as perfom()
