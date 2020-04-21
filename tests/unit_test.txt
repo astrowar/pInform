@@ -6,9 +6,14 @@ do kind(device,thing)
 do kind(lightSource)
 
 
+enum device_state => on | off 
+field $device.state [ device_state  ] as off
+
 do instance( flashlight, lightSource, device )
  
 
+field flashlight.batteries($x) as false
+field flashlight.state($x) as $x = on|off
 
 unless  lighten($x) as false 
 do  lighten($x) as lightSource($x) 
