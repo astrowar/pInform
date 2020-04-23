@@ -6,3 +6,39 @@ do tantalising($x) as thing($x) , inside($x, $c ), container($c) ,locked($c),   
 do+ can_see( $who , $x) as location($who, $loc), location($x, $loc), room($loc) ,is_lit($room).
 do+ can_see( $who , $x) as is_hidden($x), fail.
 do+ can_see( $who , $x) as location($x, $loc), pocket($loc) , fail.
+
+
+//A human being is a kind of mammal. 
+
+
+//Brightness is a kind of value. The brightnesses are guttering, weak, radiant and blazing. 
+//A brightness can be adequate or inadequate. 
+//A brightness is usually adequate. 
+//weak is inadequate.
+
+value brightness =>  guttering | weak | radiant | blazing
+tag brightness => * adequate | inadequate
+tag weak => inadequate
+
+
+
+tag brightness =>  natural  | * artificial
+
+//The lantern has a brightness. The lantern is blazing.
+
+do thing(lantern)
+do field(lantern,brightness) => blazing
+
+
+//A dead end is a kind of room with printed name "Dead End" and description "This is a dead end, where crags in the uneven rock are caught by the [brightness of the lantern] flame you hold aloft. Despite [river sound] there is no sign of the stream." A dead end is usually dark.
+
+do kind(dead end ,room )
+do field(dead end ,printed name) as "Dead End"
+do field(dead end ,description) as "This is a dead end, where crags in the uneven rock are caught by the [lantern.brightness ] flame you hold aloft. Despite [river sound] there is no sign of the stream."
+tag dead end  =>  dark
+
+
+do kind(container)
+//tag container => *opaque | transparent 
+
+do main() as true
