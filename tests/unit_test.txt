@@ -7,7 +7,7 @@ do kind(lightSource)
 
 
 enum device_state => on | off 
-field $device.state [ device_state  ] as off
+field $device.state : device_state  as off
 
 do instance( flashlight, lightSource, device )
  

@@ -1,0 +1,20 @@
+//A human being is a kind of mammal. 
+ 
+
+
+//Brightness is a kind of value. The brightnesses are guttering, weak, radiant and blazing. 
+//A brightness can be adequate or inadequate. 
+//A brightness is usually adequate. 
+//weak is inadequate.
+
+value brightness =>  guttering | weak | radiant | blazing
+
+tag brightness => * adequate | inadequate
+tag weak => inadequate
+
+tag brightness =>  natural  | * artificial
+
+do kind(container)
+//tag container => *opaque | transparent 
+
+do main() as true

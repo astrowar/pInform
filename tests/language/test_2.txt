@@ -1,0 +1,8 @@
+//a thing is tantalising if it is in a locked opaque container which the player can see.
+
+do tantalising($x) as thing($x) , inside($x, $c ), container($c) ,locked($c),   opaque($c) , can_see( $player , $c)
+
+
+do+ can_see( $who , $x) as location($who, $loc), location($x, $loc), room($loc) ,is_lit($room).
+do+ can_see( $who , $x) as is_hidden($x), fail.
+do+ can_see( $who , $x) as location($x, $loc), pocket($loc) , fail.

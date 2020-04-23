@@ -299,6 +299,21 @@ export namespace SyntaxParser {
         }
     }
 
+    function* atomDecl0(args)  
+    {
+        if (args.length == 1)
+          {  console.log(args)
+             let atm = args[0].txt
+             if (isValidAtomName(args))  
+              {
+                   yield new GTems.Atom(atm)        
+              }
+
+          }
+    } 
+
+
+
     function* pmatch_or(args_dict) {
         let pname1: ITerm[] = args_dict["$term"]
         if (pname1.length != 1) return undefined       
@@ -399,6 +414,10 @@ export namespace SyntaxParser {
         }
     }
 
+
+   
+
+ 
     function* expr_or(args_dict) {
         let x: ITerm[] = args_dict["$X"]
         let y: ITerm[] = args_dict["$Y"]
@@ -694,6 +713,8 @@ export namespace SyntaxParser {
 
         }
     }
+
+
     function* codeBody(y) {
         //maior e mais complexa funcao
         for (var cy of codebodyMatch(y)) {
@@ -701,6 +722,51 @@ export namespace SyntaxParser {
         }
     }
 
+
+
+    function* valuebodyMatch(args) {
+        if (isBalanced(args) ==false ) return undefined
+        var pool = []
+        var actual =[]
+        while (args.length > 0 )
+        { 
+          if ((args[0].txt === "|")== false  ){
+               actual.push(args[0].txt)  
+           }
+           if ((args[0].txt === "|" ) || (args.length  == 1 )) 
+           {
+            let atom_name = actual.join(" ")
+            actual = []
+            //if (atom_name[0] === "*"){               
+               pool.push( new GTems.Atom(atom_name ) )   
+             
+          }
+          args.shift()           
+        }  
+        yield pool        
+    }
+
+    function* tagbodyMatch(args) {
+        if (isBalanced(args) ==false ) return undefined
+        var pool = []
+        var actual =[]
+        while (args.length > 0 )
+        { 
+          if ((args[0].txt === "|")== false  ){
+               actual.push(args[0].txt)  
+           }
+           if ((args[0].txt === "|" ) || (args.length  == 1 )) 
+           {
+            let atom_name = actual.join(" ")
+            actual = []
+            //if (atom_name[0] === "*"){               
+               pool.push( new GTems.Atom(atom_name ) )   
+             
+          }
+          args.shift()           
+        }  
+        yield pool        
+    }
 
     function syntax_xyz(args_dict, reFunc): boolean {
         let x = args_dict["$X"]
@@ -764,7 +830,33 @@ export namespace SyntaxParser {
         }
         return false
     }
+
+    function value_xy(args_dict, reFunc): boolean {
+        let x = args_dict["$X"]
+        let y = args_dict["$Y"]
+        for (var px of atomDecl0(x)) {
+            for (var cy of valuebodyMatch(y)) {              
+                reFunc(px, cy, undefined, ["value"])
+                return true
+            }
+        }
+        return false
+    }
  
+
+    function tag_xy(args_dict, reFunc): boolean {
+        let x = args_dict["$X"]
+        let y = args_dict["$Y"]
+        for (var px of atomDecl0(x)) {
+            for (var cy of tagbodyMatch(y)) {              
+                reFunc(px, cy, undefined, ["value"])
+                return true
+            }
+        }
+        return false
+    }
+
+
    
     function let_xy(args_dict, reFunc): boolean {
         return syntax_xy(args_dict, (p, body, cond, poptions) => { p.name =   p.name; reFunc(p, body, cond, poptions.concat(["let"])) })
@@ -952,8 +1044,9 @@ export namespace SyntaxParser {
             new MParse.Matchfunctior("before  $X as  $Y ", before_xy),
             new MParse.Matchfunctior("before  $X ", before_x),
             new MParse.Matchfunctior("const  $X as  $Y ", const_xy),
-            new MParse.Matchfunctior("var   $X as  $Y ", var_xy)
- 
+            new MParse.Matchfunctior("var   $X as  $Y ", var_xy),
+            new MParse.Matchfunctior("value   $X = >  $Y ", value_xy),
+            new MParse.Matchfunctior("tag  $X = >  $Y ", tag_xy)
         ]
         let xlines = linesSplit(xcode)
         for (var [i, iline] of xlines.entries()) {

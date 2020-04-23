@@ -8,7 +8,7 @@
       {
         "type": "node",
         "request": "launch",
-        "name": "Launch Program",
+        "name": "Launch Program",        
         "program": "${workspaceFolder}/src/out/compiler.js",
         //"preLaunchTask": "tsc: build - src/tsconfig.json",
         "preLaunchTask": "build",     
