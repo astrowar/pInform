@@ -261,6 +261,11 @@ export namespace Interp {
         }
 
         init_pred() {
+            //invert_init_preds
+           
+            this.predicades["init"] = this.predicades["init"].reverse();
+ 
+
             //let n = this.init_entries.length
             let sol = new Solution.Solution(Solution.SolutionState.QTrue, GTems.atom_true(), {})
             let stk: QueryStack = new QueryStack()

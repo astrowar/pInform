@@ -17,4 +17,23 @@ tag brightness =>  natural  | * artificial
 do kind(container)
 //tag container => *opaque | transparent 
 
+
+//A fluid container is a kind of container. A fluid container has a volume called a fluid capacity. A fluid container has a volume called current volume.
+
+do kind(fluid container, container)
+
+// volume is an number
+value volume => number
+
+
+field  fluid container :: fluid capacity   as  volume(10) 
+field  fluid container :: current volume   as  volume 
+
+ 
+
+do instance(copo, fluid container)
+field  copo :: fluid capacity   as  volume(1) 
+ 
+ 
+
 do main() as true

@@ -1,0 +1,6 @@
+// testes basicos 
+
+var $x as 0 
+do init() as assign($x , 10)
+do init() as assign($x , 5)
+do main() as write( $x == 5 )

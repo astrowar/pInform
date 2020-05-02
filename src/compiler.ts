@@ -6,7 +6,7 @@ var fs = require('fs');
 
 
 let ctx :Interp.Context = undefined
-let script_filename = 'C:/dev/pInform/tests/language/test_1.txt'
+let script_filename = 'C:/dev/pInform/tests/language/test_3.txt'
 //let script_filename = 'C:/dev/TS/pInform/tests/unit_test.txt'
 //let script_filename = process.argv[2]
 if (fs.existsSync(script_filename) ) {
