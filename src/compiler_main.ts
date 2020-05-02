@@ -301,15 +301,11 @@ export namespace SyntaxParser {
 
     function* atomDecl0(args)  
     {
-        if (args.length == 1)
-          {  console.log(args)
-             let atm = args[0].txt
-             if (isValidAtomName(args))  
-              {
-                   yield new GTems.Atom(atm)        
-              }
-
-          }
+        
+        for (var vj of  expr_atom(args))
+           {
+               yield vj
+           }
     } 
 
 
@@ -597,6 +593,23 @@ export namespace SyntaxParser {
 
             yield new GTems.GList(lst_x)
         }
+    }
+
+    function* expr_atom(x: ITerm[]) {
+        if (x.length == 1 ) 
+        {   yield x[0].getGeneralTerm() } 
+       else {  
+           let all_str = []
+           for( var [i,xx] of x.entries())
+           {
+               all_str.push(xx.gettext() )
+           }
+           let atm_name = all_str.join(" ")            
+           if ( GTems.Atom.isValidAtomName(atm_name)) 
+           { 
+               yield new GTems.Atom(atm_name)  
+           }
+       }
     }
 
     function* expr_literal(args_dict) {

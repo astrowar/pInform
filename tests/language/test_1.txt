@@ -1,7 +1,11 @@
-//A human being is a kind of mammal. 
- 
+// teste de kinds e subkinds
 
+do kind(   thing)
+do kind( object , thing)
+do kind( book , object )
+do instance( grimorium , book)
 
+<<<<<<< HEAD
 //Brightness is a kind of value. The brightnesses are guttering, weak, radiant and blazing. 
 //A brightness can be adequate or inadequate. 
 //A brightness is usually adequate. 
@@ -37,3 +41,9 @@ field  copo :: fluid capacity   as  volume(1)
  
 
 do main() as true
+=======
+do main() as {  
+      book( grimorium ),
+      write("pass")
+}
+>>>>>>> 1d8df97466010ae69dca9af8007bc12407253807
