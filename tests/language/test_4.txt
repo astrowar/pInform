@@ -1,0 +1,9 @@
+// testes de prioridades de predicados
+
+do p($x) as $x = "first P  "
+do+ p($x) as $x = "with + "
+do p($x) as $x = "second p "
+do- p($x) as $x = "with -"
+unless p($x) as $x = 5 "unless p "
+
+do main() as { p($x), write( " $x \n") }

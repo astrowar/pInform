@@ -263,13 +263,15 @@ export namespace Interp {
         init_pred() {
             //invert_init_preds
            
+            if ("init" in this.predicades) { 
             this.predicades["init"] = this.predicades["init"].reverse();
  
 
-            //let n = this.init_entries.length
-            let sol = new Solution.Solution(Solution.SolutionState.QTrue, GTems.atom_true(), {})
-            let stk: QueryStack = new QueryStack()
-            for (var e of this.query_ar0(stk, sol, "init")) { } 
+                //let n = this.init_entries.length
+                let sol = new Solution.Solution(Solution.SolutionState.QTrue, GTems.atom_true(), {})
+                let stk: QueryStack = new QueryStack()
+                for (var e of this.query_ar0(stk, sol, "init")) { } 
+            }
         }
 
 
@@ -1847,14 +1849,12 @@ export namespace Interp {
                          return 
                     }
              }
-             
               
-
-                
-            
-
+            let has_query_any = false  
             for (var r of this.query_n_argv(stk, sol, attribSelect, f_name, [arg1])) {
+                has_query_any = true 
                 yield r
+            
             }
 
 
@@ -1882,9 +1882,12 @@ export namespace Interp {
                 else {
 
                     if  (f_name in this.predicades) { 
-                        this.warring("Predicate " + f_name + "/1  not apply ")
-                        //yield new Solution.Solution(Solution.SolutionState.QFalse, GTems.atom_false(), {})
+                        if (has_query_any==false ){
+                           this.warring("Predicate " + f_name + "/1  not apply ")
+                           //yield new Solution.Solution(Solution.SolutionState.QFalse, GTems.atom_false(), {})
+                        }
                         return 
+                        
                     }
                     else{
                       this.warring("Predicate " + f_name + "/1  not found ")
