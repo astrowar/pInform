@@ -1,11 +1,53 @@
 // teste de kinds e subkinds
 
-do kind(   thing)
-do kind( object , thing)
-do kind( book , object )
-do instance( grimorium , book)
+// a definicao do kind e subkinds precisam ser definidos como elemento de linguagem, tal como é no c++ e no python 
+
+// A class specifies
+//    a collection of fields;
+//    a collection of methods;
+//    initial value expressions for the fields; and
+//    initialization variables that are bound to initialization arguments.
+
+
+
+
+
+kind thing().
+kind object(thing).
+
+// field apenas reserva o slot com um determinado nome e atribui um valor inicial para cada instancia
+field object.name as "undefined object" 
+
+//um campo pode ser vazio, sem nada atribuido, equivalente ao nil, nao recomendavel utilizar essa construcao
+field object.internal_name  
+
+//const-field define um campo que nunca muda e vai causar erro se tentar mudar
+const-field object.size as normal
+
+// clualas de get e set field sao nescessarias para evitar unify nesses itens
+get-field object.public_name  as  self.internal_name 
+set-field object.public_name($value) as  self.internal_name = $value  
+
+// get-field pode ser uma predicado computado
+get-field object.portable as  self.size = normal ;  self.size = small 
+
+// retrona um valor  se o valor definido nao existe 
+// recomendavel criar fields com _ para campos privados
+get-field object.location as self._location , limbo
+ 
+//a palavra chave self se refere ao proprio objeto em questao  
+
+
+// gera instancias dos kinds definidos . 
+
+instance book(object).
+instance pen(object).
+
+
+//é possivel criar instancias on-fly 
 
 do main() as {  
-      book( grimorium ),
+      grimorium = instance(book),
+      grimorium.portable, 
       write("pass")
 }
